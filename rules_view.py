@@ -594,8 +594,104 @@ def _parse_general_rules() -> list[dict]:
     return parsed
 
 
+INGAME_RULES = """**§ ROBLOX GAME RULES §**
+*Please read carefully before playing*
+━━━━━━━━━━━━━━━━━━
+
+**I. Roblox Compliance**
+All Roblox Terms of Service and Community Standards apply at all times.
+• Violating Roblox ToS/Community Standards → Warning / Ban (severity-based)
+
+**II. No Exploiting**
+Abusing bugs, glitches, or exploits for personal gain results in severe penalties, including permanent bans.
+• Minor exploit for personal convenience → Temporary Ban
+• Exploiting for unfair advantage or to harm others' experience → Permanent Ban
+
+**III. Content Standards**
+No suggestive, inappropriate, or controversial content — this includes usernames, outfits, builds, and chat.
+• First offense → Warning + forced change
+• Repeated offense → Temporary to Permanent Ban
+
+**IV. No Trolling**
+Deliberately disrupting roleplay, baiting reactions, or ruining others' experience for "fun" is forbidden.
+• Warning / Temporary Mute, escalating to Ban for repeat offenders
+
+**V. Respect & Conduct**
+No harassment, stalking, discrimination, hate speech, or personal attacks. Treat others the way you'd want to be treated.
+• Harassment/personal attacks → Warning / Temporary Ban
+• Discrimination or hate speech → Permanent & Non-Appealable Ban
+
+**VI. Fair Roleplay**
+The following are considered Fail RP and are **not allowed**:
+› **Meta Grudging** — Letting OOC conflict affect IC treatment of a player
+› **Meta Gaming** — Using OOC knowledge your character has no way of knowing IC
+› **God Modding** — Giving your character unfair/unbeatable traits, or controlling another player's character without consent
+› **Combat Logging** — Leaving mid-conflict to dodge consequences
+› **Power Gaming** — Forcing actions onto another player without giving them a chance to respond
+• Any Fail RP violation → Warning, escalating to Temporary Ban for repeat offenders
+
+**VII. No Advertising**
+Do not advertise other games, Discord servers, or social media without staff permission.
+• First offense → Warning + message removed
+• Repeated advertising → Temporary Ban
+
+**VIII. Staff Authority**
+Staff decisions are final during active situations. Disputes go through proper channels (ticket/DM), not public arguments.
+• Arguing publicly with staff → Warning / Temporary Mute
+
+**IX. Age-Appropriate Themes**
+Dark or mature myth themes (death, sacrifice, war, etc.) are allowed but must stay symbolic/non-graphic — no gore, excessive violence, or disturbing detail.
+• Warning + content removal, escalating to Temporary Ban for repeat offenders
+
+**X. One Character Rule**
+Players may only control one primary character at a time unless given permission for NPCs.
+• Warning + character correction
+
+**XI. Consent for Major Actions**
+Killing, kidnapping, or permanently altering another player's character requires their OOC consent first. This also covers drawing someone's OC or using them in animations/RP — ask first.
+• Acting without consent → Warning, escalating to Temporary Ban for repeat offenders
+
+**XII. Perma-Death Consent**
+A character can only be permanently killed off with the player's explicit OOC agreement beforehand. No surprise perma-kills.
+• Forcing a perma-kill without consent → Warning / Temporary Ban + action reversed
+
+**XIII. Lore Consistency**
+Players may not retcon or contradict established server lore to fit their own character or story — check with staff before introducing major lore changes.
+• Warning + retcon reversed, escalating to Temporary Ban for repeat offenders"""
+
+ECONOMY_RULES = """**Economy (Envy) Rules**
+
+**I. No Real-Money Trading**
+Envy or in-game items may not be bought, sold, or traded for real money or real-world goods.
+• Exception: rewards given directly by an admin (e.g. Nitro, giveaway prizes) are allowed.
+• Any player found RMT-ing → Permanent Ban + trade reversal
+
+**II. No Exploiting**
+Using bugs, glitches, or loopholes to duplicate currency or items, or to gain an unfair economic advantage → Permanent Ban + full point/currency wipe
+
+**III. No Fake Listings**
+Creating fake, misleading, or bait listings in the marketplace (including listings for items you don't actually have) → Warning / Temporary Ban + listing removed
+
+**IV. Listings Must Go Through the Official System**
+All trades and sales must be done through the proper listing/market command — no exceptions, no off-book side deals. Off-book trades are not covered by refund/support if something goes wrong.
+
+**V. No Price Manipulation**
+Colluding with alt accounts or other players to manipulate prices, or scalping listings to exploit new/inactive players → Warning / Temporary Ban
+
+**VI. No Currency Farming via Alts**
+Using alternate accounts to farm Envy, exploit daily/work rewards, or manipulate the market → Permanent Ban (All Accounts)
+
+**VII. Scam Trades**
+Deliberately scamming another player in a trade (not delivering after payment, swapping listed items, etc.) → Permanent Ban + trade reversed where possible
+
+**VIII. Admin Discretion on Disputes**
+Staff reserve the right to reverse, freeze, or cancel any trade/listing suspected of fraud, exploitation, or rule-breaking, even without a formal report."""
+
+
 RULESETS = {
     "general": _parse_general_rules(),
+    "ingame": [{"label": f"Section {i}", "value": f"ingame_{i}", "description": "View this in-game rules section.", "title": f"IN-GAME RULES — SECTION {i}", "bullets": [part.strip()]} for i, part in enumerate(INGAME_RULES.split("\n\n")[1:], start=1) if part.strip()],
+    "economy": [{"label": f"Rule {i}", "value": f"economy_{i}", "description": "View this Envy economy rule.", "title": f"ECONOMY (ENVY) — RULE {i}", "bullets": [part.strip()]} for i, part in enumerate(ECONOMY_RULES.split("\n\n")[1:], start=1) if part.strip()],
     "security": SECURITY_RULES,
     "research": RESEARCH_RULES,
     "technical": TECHNICAL_RULES,
@@ -605,6 +701,8 @@ RULESETS = {
 
 TITLES = {
     "general": "GENERAL RULES",
+    "ingame": "§ ROBLOX GAME RULES §",
+    "economy": "ECONOMY (ENVY) RULES",
     "security": "SITE AEGIS 17 — SECURITY RULES",
     "research": "RESEARCH DIVISION — RULES",
     "technical": "TECHNICAL DIVISION — RULES",
@@ -613,6 +711,8 @@ TITLES = {
 }
 
 CLOSING_TEXT = {
+    "ingame": "*Please read all in-game rules carefully before playing.*",
+    "economy": "*Envy economy rules apply to all currency, trades, listings, and marketplace activity.*",
     "general": (
         "*These General Rules apply to everyone in the server. Select a section above to read its full rules.*"
     ),
@@ -677,8 +777,77 @@ def build_reply(title: str, body: str) -> ui.LayoutView:
     return view
 
 
+
+class LegacyRulesView(ui.LayoutView):
+    """The original Wraith overview containing Community, In-Game, and Envy rules."""
+    def __init__(self):
+        super().__init__(timeout=None)
+        container = ui.Container(accent_color=_accent())
+        container.add_item(ui.TextDisplay("# PROJECT HEAVEN — RULES"))
+        container.add_item(
+            ui.TextDisplay(
+                'Click **"Select The Rule"** to choose the rules category you want to view.'
+            )
+        )
+        container.add_item(ui.Separator())
+        container.add_item(ui.ActionRow(LegacyRuleSelect()))
+        container.add_item(
+            ui.TextDisplay("> • If you have a problem or a question, open a ticket in support.")
+        )
+        container.add_item(ui.Separator())
+        container.add_item(ui.TextDisplay("-# Made by Saintless"))
+        self.add_item(container)
+
+
+class LegacyRuleSelect(ui.Select):
+    def __init__(self):
+        options = [
+            discord.SelectOption(
+                label="General Rules",
+                value="general",
+                description="Community-wide rules.",
+            ),
+            discord.SelectOption(
+                label="In-Game Rules",
+                value="ingame",
+                description="Roblox roleplay and game rules.",
+            ),
+            discord.SelectOption(
+                label="Economy (Envy) Rules",
+                value="economy",
+                description="Rules for the Envy economy system.",
+            ),
+        ]
+        super().__init__(
+            placeholder="Select The Rule",
+            custom_id="wraith:rules:category",
+            options=options,
+        )
+
+    async def callback(self, interaction: discord.Interaction):
+        key = self.values[0]
+        titles = {
+            "general": "GENERAL RULES",
+            "ingame": "§ ROBLOX GAME RULES §",
+            "economy": "ECONOMY (ENVY) RULES",
+        }
+        bodies = {
+            "general": GENERAL_RULES,
+            "ingame": INGAME_RULES,
+            "economy": ECONOMY_RULES,
+        }
+        await interaction.response.send_message(
+            view=build_reply(titles[key], bodies[key]),
+            ephemeral=True,
+        )
+
+
 def build_general_view() -> ui.LayoutView:
     return DepartmentRulesView("general")
+
+
+def build_rules_overview() -> ui.LayoutView:
+    return LegacyRulesView()
 
 def build_rule_detail(rule: dict) -> ui.LayoutView:
     view = ui.LayoutView()
@@ -820,6 +989,6 @@ class DepartmentRulesView(ui.LayoutView):
 
 def build_persistent_department_views() -> list[DepartmentRulesView]:
     """Return persistent rule views for restart-safe interactions."""
-    return [DepartmentRulesView(key) for key in RULESETS]
+    return [LegacyRulesView(), *(DepartmentRulesView(key) for key in RULESETS)]
 
 
