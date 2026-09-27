@@ -724,6 +724,9 @@ class GeneralRulesView(ui.LayoutView):
         )
 
 
+def build_general_view() -> ui.LayoutView:
+    return GeneralRulesView()
+
 def build_rule_detail(rule: dict) -> ui.LayoutView:
     view = ui.LayoutView()
     container = ui.Container(accent_color=_accent())
