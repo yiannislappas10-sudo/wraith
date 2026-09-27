@@ -631,85 +631,97 @@ def _accent() -> discord.Colour:
 
 
 def build_reply(title: str, body: str) -> ui.LayoutView:
-    """Build a full Components V2 panel in the same style as Security-Rules."""
+    """Build a simple Components V2 reply for detail dialogs."""
     view = ui.LayoutView()
     container = ui.Container(accent_color=_accent())
     container.add_item(ui.TextDisplay(f"# {title}"))
-    container.add_item(
-        ui.TextDisplay(
-            f'And most important thing, you must follow [Discord\'s Terms of Service]({COMMUNITY_GUIDELINES_URL})'
-        )
-    )
-    container.add_item(
-        ui.ActionRow(
-            ui.Button(
-                label="Community Guidelines",
-                style=discord.ButtonStyle.link,
-                url=COMMUNITY_GUIDELINES_URL,
-            )
-        )
-    )
     container.add_item(ui.Separator())
     container.add_item(ui.TextDisplay(body))
-    container.add_item(
-        ui.TextDisplay(
-            "> • If you have a problem or a question, open a ticket in support."
+    view.add_item(container)
+    return view
+
+
+class GeneralRulesView(ui.LayoutView):
+    """Persistent General Rules Components V2 panel matching department panels."""
+    def __init__(self):
+        super().__init__(timeout=None)
+
+        container = ui.Container(accent_color=_accent())
+        container.add_item(ui.TextDisplay("# GENERAL RULES"))
+        container.add_item(
+            ui.TextDisplay(
+                f'And most important thing, you must follow [Discord\'s Terms of Service]({COMMUNITY_GUIDELINES_URL})'
+            )
         )
-    )
+        container.add_item(
+            ui.ActionRow(
+                ui.Button(
+                    label="Community Guidelines",
+                    style=discord.ButtonStyle.link,
+                    url=COMMUNITY_GUIDELINES_URL,
+                )
+            )
+        )
+        container.add_item(ui.Separator())
+        container.add_item(ui.TextDisplay(GENERAL_RULES))
+        container.add_item(
+            ui.TextDisplay(
+                "> • If you have a problem or a question, open a ticket in support."
+            )
+        )
 
-    support_button = ui.Button(
-        label="Support",
-        style=discord.ButtonStyle.link,
-        url=SUPPORT_URL,
-    )
-    point_button = ui.Button(
-        label="Point Info",
-        style=discord.ButtonStyle.secondary,
-        custom_id="wraith:general:point_info",
-    )
-    punish_button = ui.Button(
-        label="Punishment Power",
-        style=discord.ButtonStyle.secondary,
-        custom_id="wraith:general:punishment",
-    )
+        point_button = ui.Button(
+            label="Point Info",
+            style=discord.ButtonStyle.secondary,
+            custom_id="wraith:general:point_info",
+        )
+        punish_button = ui.Button(
+            label="Punishment Power",
+            style=discord.ButtonStyle.secondary,
+            custom_id="wraith:general:punishment",
+        )
+        support_button = ui.Button(
+            label="Support",
+            style=discord.ButtonStyle.link,
+            url=SUPPORT_URL,
+        )
+        point_button.callback = self.on_point_info
+        punish_button.callback = self.on_punishment
+        container.add_item(ui.ActionRow(point_button, punish_button, support_button))
 
-    async def point_callback(interaction: discord.Interaction):
+        container.add_item(
+            ui.TextDisplay(
+                "> • You may re-join only by *High Rank* approval\n"
+                "You can apply with an apology."
+            )
+        )
+        container.add_item(
+            ui.TextDisplay(
+                "> • Your warnings with points will be removed after a month.\n"
+                "If you get banned again, will be perm with no excuse."
+            )
+        )
+        container.add_item(ui.Separator())
+        container.add_item(
+            ui.TextDisplay(
+                "*General rules apply to every member. Serious violations may result in "
+                "warning, mute, suspension, or ban depending on severity.*"
+            )
+        )
+        container.add_item(ui.TextDisplay("-# Made by Saintless"))
+        self.add_item(container)
+
+    async def on_point_info(self, interaction: discord.Interaction):
         await interaction.response.send_message(
             view=build_reply("Point Info", POINT_INFO),
             ephemeral=True,
         )
 
-    async def punish_callback(interaction: discord.Interaction):
+    async def on_punishment(self, interaction: discord.Interaction):
         await interaction.response.send_message(
             view=build_reply("Punishment Power", PUNISHMENT_TABLE),
             ephemeral=True,
         )
-
-    point_button.callback = point_callback
-    punish_button.callback = punish_callback
-    container.add_item(ui.ActionRow(point_button, punish_button, support_button))
-    container.add_item(
-        ui.TextDisplay(
-            "> • You may re-join only by *High Rank* approval\n"
-            "You can apply with an apology."
-        )
-    )
-    container.add_item(
-        ui.TextDisplay(
-            "> • Your warnings with points will be removed after a month.\n"
-            "If you get banned again, will be perm with no excuse."
-        )
-    )
-    container.add_item(ui.Separator())
-    container.add_item(
-        ui.TextDisplay(
-            "*General rules apply to every member. Serious violations may result in "
-            "warning, mute, suspension, or ban depending on severity.*"
-        )
-    )
-    container.add_item(ui.TextDisplay("-# Made by Saintless"))
-    view.add_item(container)
-    return view
 
 
 def build_rule_detail(rule: dict) -> ui.LayoutView:
@@ -850,8 +862,8 @@ class DepartmentRulesView(ui.LayoutView):
         )
 
 
-def build_persistent_department_views() -> list[DepartmentRulesView]:
-    """Return one persistent view per department for restart-safe interactions."""
-    return [DepartmentRulesView(key) for key in RULESETS]
+def build_persistent_department_views() -> list[ui.LayoutView]:
+    """Return persistent rule views for restart-safe interactions."""
+    return [GeneralRulesView(), *(DepartmentRulesView(key) for key in RULESETS)]
 
 
