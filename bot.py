@@ -55,35 +55,35 @@ async def send_pride_event(interaction: discord.Interaction, event_name: str):
         logger.warning("Could not report event to Pride: %s", error)
 
 
-@bot.tree.command(name="general", description="Show the general rules.")
+@bot.tree.command(name="general", description="Post the General Rules Components V2 panel.")
 async def general(interaction: discord.Interaction):
     await interaction.response.send_message(
-        view=build_reply("General Rules", GENERAL_RULES)
+        view=build_reply("GENERAL RULES", GENERAL_RULES)
     )
 
 
-@bot.tree.command(name="sec", description="Show the security rules.")
-async def sec(interaction: discord.Interaction):
+@bot.tree.command(name="security-rules", description="Post the Security rules Components V2 panel.")
+async def security_rules(interaction: discord.Interaction):
     await interaction.response.send_message(view=build_department_view("security"))
 
 
-@bot.tree.command(name="research", description="Show the research rules.")
-async def research(interaction: discord.Interaction):
+@bot.tree.command(name="research-rules", description="Post the Research rules Components V2 panel.")
+async def research_rules(interaction: discord.Interaction):
     await interaction.response.send_message(view=build_department_view("research"))
 
 
-@bot.tree.command(name="technical", description="Show the technical rules.")
-async def technical(interaction: discord.Interaction):
+@bot.tree.command(name="technical-rules", description="Post the Technical rules Components V2 panel.")
+async def technical_rules(interaction: discord.Interaction):
     await interaction.response.send_message(view=build_department_view("technical"))
 
 
-@bot.tree.command(name="janitors", description="Show the janitorial rules.")
-async def janitors(interaction: discord.Interaction):
+@bot.tree.command(name="janitor-rules", description="Post the Janitorial rules Components V2 panel.")
+async def janitor_rules(interaction: discord.Interaction):
     await interaction.response.send_message(view=build_department_view("janitor"))
 
 
-@bot.tree.command(name="medical", description="Show the medical rules.")
-async def medical(interaction: discord.Interaction):
+@bot.tree.command(name="medical-rules", description="Post the Medical rules Components V2 panel.")
+async def medical_rules(interaction: discord.Interaction):
     await interaction.response.send_message(view=build_department_view("medical"))
 
 
@@ -107,7 +107,7 @@ async def on_app_command_completion(
     interaction: discord.Interaction, command: app_commands.Command
 ):
     await send_pride_event(interaction, f"command:{command.qualified_name}")
-    if command.qualified_name in {"general", "sec", "research", "technical", "janitors", "medical"}:
+    if command.qualified_name in {"general", "security-rules", "research-rules", "technical-rules", "janitor-rules", "medical-rules"}:
         await send_pride_event(interaction, "rules_view")
 
 
