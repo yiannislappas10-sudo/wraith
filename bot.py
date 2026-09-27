@@ -137,6 +137,8 @@ async def on_app_command_error(
     interaction: discord.Interaction, error: app_commands.AppCommandError
 ):
     await report_runtime_error(error, "slash command")
+    original = getattr(error, "original", error)
+    logger.exception("Slash command failure: %r", original)
     message = "Something went wrong while running that command."
     if interaction.response.is_done():
         await interaction.followup.send(message, ephemeral=True)
