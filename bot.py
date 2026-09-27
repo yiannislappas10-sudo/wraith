@@ -11,6 +11,7 @@ from rules_view import (
     build_department_view,
     build_persistent_department_views,
     build_general_view,
+    build_rules_overview,
 )
 
 load_dotenv()
@@ -52,6 +53,11 @@ async def send_pride_event(interaction: discord.Interaction, event_name: str):
                     logger.warning("Pride API returned HTTP %s", response.status)
     except (aiohttp.ClientError, TimeoutError) as error:
         logger.warning("Could not report event to Pride: %s", error)
+
+
+@bot.tree.command(name="rules", description="Show the community, game, and economy rules.")
+async def rules(interaction: discord.Interaction):
+    await interaction.response.send_message(view=build_rules_overview())
 
 
 @bot.tree.command(name="general", description="Post the General Rules Components V2 panel.")
@@ -104,7 +110,7 @@ async def on_app_command_completion(
     interaction: discord.Interaction, command: app_commands.Command
 ):
     await send_pride_event(interaction, f"command:{command.qualified_name}")
-    if command.qualified_name in {"general", "security-rules", "research-rules", "technical-rules", "janitor-rules", "medical-rules"}:
+    if command.qualified_name in {"rules", "general", "security-rules", "research-rules", "technical-rules", "janitor-rules", "medical-rules"}:
         await send_pride_event(interaction, "rules_view")
 
 
