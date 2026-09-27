@@ -563,7 +563,39 @@ MEDICAL_RULES = [
     },
 ]
 
+
+def _parse_general_rules() -> list[dict]:
+    """Convert the existing General Rules text into dropdown-friendly rule sections."""
+    import re
+
+    pattern = re.compile(
+        r"\*\*([IVX]+\. [^*]+)\*\*\n(.*?)(?=\n\n\*\*[IVX]+\. |\Z)",
+        re.DOTALL,
+    )
+    parsed = []
+    for index, match in enumerate(pattern.finditer(GENERAL_RULES), start=1):
+        title = match.group(1).strip()
+        raw_lines = [line.strip() for line in match.group(2).strip().splitlines() if line.strip()]
+        bullets = []
+        for line in raw_lines:
+            bullets.append(line[2:].strip() if line.startswith("• ") else line)
+        description = bullets[0] if bullets else f"Read {title}."
+        if len(description) > 100:
+            description = description[:97] + "..."
+        parsed.append(
+            {
+                "label": title,
+                "value": f"general_{index}",
+                "description": description,
+                "title": title.upper(),
+                "bullets": bullets,
+            }
+        )
+    return parsed
+
+
 RULESETS = {
+    "general": _parse_general_rules(),
     "security": SECURITY_RULES,
     "research": RESEARCH_RULES,
     "technical": TECHNICAL_RULES,
@@ -572,6 +604,7 @@ RULESETS = {
 }
 
 TITLES = {
+    "general": "GENERAL RULES",
     "security": "SITE AEGIS 17 — SECURITY RULES",
     "research": "RESEARCH DIVISION — RULES",
     "technical": "TECHNICAL DIVISION — RULES",
@@ -580,6 +613,9 @@ TITLES = {
 }
 
 CLOSING_TEXT = {
+    "general": (
+        "*These General Rules apply to everyone in the server. Select a section above to read its full rules.*"
+    ),
     "security": (
         "*Security is a position of trust. If you cannot control your weapon, your authority, "
         "or your behavior, you will not remain Security.*\n\n"
@@ -641,91 +677,8 @@ def build_reply(title: str, body: str) -> ui.LayoutView:
     return view
 
 
-class GeneralRulesView(ui.LayoutView):
-    """Persistent General Rules Components V2 panel matching department panels."""
-    def __init__(self):
-        super().__init__(timeout=None)
-
-        container = ui.Container(accent_color=_accent())
-        container.add_item(ui.TextDisplay("# GENERAL RULES"))
-        container.add_item(
-            ui.TextDisplay(
-                f'And most important thing, you must follow [Discord\'s Terms of Service]({COMMUNITY_GUIDELINES_URL})'
-            )
-        )
-        container.add_item(
-            ui.ActionRow(
-                ui.Button(
-                    label="Community Guidelines",
-                    style=discord.ButtonStyle.link,
-                    url=COMMUNITY_GUIDELINES_URL,
-                )
-            )
-        )
-        container.add_item(ui.Separator())
-        container.add_item(ui.TextDisplay(GENERAL_RULES))
-        container.add_item(
-            ui.TextDisplay(
-                "> • If you have a problem or a question, open a ticket in support."
-            )
-        )
-
-        point_button = ui.Button(
-            label="Point Info",
-            style=discord.ButtonStyle.secondary,
-            custom_id="wraith:general:point_info",
-        )
-        punish_button = ui.Button(
-            label="Punishment Power",
-            style=discord.ButtonStyle.secondary,
-            custom_id="wraith:general:punishment",
-        )
-        support_button = ui.Button(
-            label="Support",
-            style=discord.ButtonStyle.link,
-            url=SUPPORT_URL,
-        )
-        point_button.callback = self.on_point_info
-        punish_button.callback = self.on_punishment
-        container.add_item(ui.ActionRow(point_button, punish_button, support_button))
-
-        container.add_item(
-            ui.TextDisplay(
-                "> • You may re-join only by *High Rank* approval\n"
-                "You can apply with an apology."
-            )
-        )
-        container.add_item(
-            ui.TextDisplay(
-                "> • Your warnings with points will be removed after a month.\n"
-                "If you get banned again, will be perm with no excuse."
-            )
-        )
-        container.add_item(ui.Separator())
-        container.add_item(
-            ui.TextDisplay(
-                "*General rules apply to every member. Serious violations may result in "
-                "warning, mute, suspension, or ban depending on severity.*"
-            )
-        )
-        container.add_item(ui.TextDisplay("-# Made by Saintless"))
-        self.add_item(container)
-
-    async def on_point_info(self, interaction: discord.Interaction):
-        await interaction.response.send_message(
-            view=build_reply("Point Info", POINT_INFO),
-            ephemeral=True,
-        )
-
-    async def on_punishment(self, interaction: discord.Interaction):
-        await interaction.response.send_message(
-            view=build_reply("Punishment Power", PUNISHMENT_TABLE),
-            ephemeral=True,
-        )
-
-
 def build_general_view() -> ui.LayoutView:
-    return GeneralRulesView()
+    return DepartmentRulesView("general")
 
 def build_rule_detail(rule: dict) -> ui.LayoutView:
     view = ui.LayoutView()
@@ -865,8 +818,8 @@ class DepartmentRulesView(ui.LayoutView):
         )
 
 
-def build_persistent_department_views() -> list[ui.LayoutView]:
+def build_persistent_department_views() -> list[DepartmentRulesView]:
     """Return persistent rule views for restart-safe interactions."""
-    return [GeneralRulesView(), *(DepartmentRulesView(key) for key in RULESETS)]
+    return [DepartmentRulesView(key) for key in RULESETS]
 
 
