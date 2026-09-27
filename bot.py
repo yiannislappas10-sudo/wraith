@@ -8,10 +8,9 @@ from discord.ext import commands
 from dotenv import load_dotenv
 
 from rules_view import (
-    GENERAL_RULES,
     build_department_view,
     build_persistent_department_views,
-    build_reply,
+    build_general_view,
 )
 
 load_dotenv()
@@ -57,9 +56,7 @@ async def send_pride_event(interaction: discord.Interaction, event_name: str):
 
 @bot.tree.command(name="general", description="Post the General Rules Components V2 panel.")
 async def general(interaction: discord.Interaction):
-    await interaction.response.send_message(
-        view=build_reply("GENERAL RULES", GENERAL_RULES)
-    )
+    await interaction.response.send_message(view=build_general_view())
 
 
 @bot.tree.command(name="security-rules", description="Post the Security rules Components V2 panel.")
