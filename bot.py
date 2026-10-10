@@ -135,6 +135,16 @@ async def report_runtime_error(error: Exception, context: str) -> None:
         logger.error("Could not send runtime-error alert: %r", alert_error)
 
 
+@bot.event
+async def on_command_error(ctx: commands.Context, error: commands.CommandError):
+    # This bot is slash-command first. Ignore stray prefix commands such as !mute
+    # instead of reporting them as runtime failures.
+    if isinstance(error, commands.CommandNotFound):
+        return
+    await report_runtime_error(error, "prefix command")
+    logger.error("Prefix command failure: %r", error)
+
+
 @bot.tree.error
 async def on_app_command_error(
     interaction: discord.Interaction, error: app_commands.AppCommandError
