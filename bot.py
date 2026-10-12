@@ -90,6 +90,52 @@ async def medical_rules(interaction: discord.Interaction):
     await interaction.response.send_message(view=build_department_view("medical"))
 
 
+@bot.tree.command(name="paths", description="Show the finalized Project Haven management paths.")
+async def paths(interaction: discord.Interaction):
+    embed = discord.Embed(
+        title="⟐ PROJECT HAVEN — FINALIZED PATHS",
+        description=(
+            "The Project Haven management structure is divided into three "
+            "specialized paths, each with its own responsibilities and progression."
+        ),
+        color=discord.Color.from_rgb(20, 25, 35),
+    )
+    embed.add_field(
+        name="⚔️  I. MODERATION",
+        value=(
+            "〔 🛡️ 〕 **Moderator**\n"
+            "　↳ **Senior Moderator**\n"
+            "　↳ **Administrator**\n"
+            "　↳ **Community Director**"
+        ),
+        inline=False,
+    )
+    embed.add_field(
+        name="✉️  II. TICKET HANDLING",
+        value=(
+            "〔 🎟️ 〕 **Ticket Handler**\n"
+            "　↳ **Case Specialist**\n"
+            "　↳ **Head of Cases**\n"
+            "　↳ **Chief of Member Affairs**\n\n"
+            "〔 ⟐ 〕 *Rank IV · Highest rank in the Ticket Handling path. "
+            "This path does not lead to Community Director.*"
+        ),
+        inline=False,
+    )
+    embed.add_field(
+        name="🔎  III. VERIFICATION",
+        value=(
+            "〔 ◈ 〕 **Verification Personnel**\n"
+            "　↳ **Verification Specialist**\n"
+            "　↳ **Chief Verifier**\n"
+            "　↳ **Community Director**"
+        ),
+        inline=False,
+    )
+    embed.set_footer(text="PROJECT HAVEN  ⟐  MANAGEMENT STRUCTURE")
+    await interaction.response.send_message(embed=embed)
+
+
 @bot.event
 async def setup_hook():
     # Re-register the department V2 views so existing rule panels remain
@@ -110,7 +156,7 @@ async def on_app_command_completion(
     interaction: discord.Interaction, command: app_commands.Command
 ):
     await send_pride_event(interaction, f"command:{command.qualified_name}")
-    if command.qualified_name in {"rules", "general", "security-rules", "research-rules", "technical-rules", "janitor-rules", "medical-rules"}:
+    if command.qualified_name in {"rules", "general", "security-rules", "research-rules", "technical-rules", "janitor-rules", "medical-rules", "paths"}:
         await send_pride_event(interaction, "rules_view")
 
 
