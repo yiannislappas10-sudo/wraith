@@ -136,6 +136,76 @@ async def paths(interaction: discord.Interaction):
     await interaction.response.send_message(embed=embed)
 
 
+@bot.tree.command(
+    name="power-rankings",
+    description="Show the Project Haven staff power rankings.",
+)
+async def power_rankings(interaction: discord.Interaction):
+    embed = discord.Embed(
+        title="⟐ PROJECT HAVEN — POWER RANKINGS",
+        description=(
+            "A visual overview of the staff hierarchy. Roles listed on the same "
+            "tier are considered equal in standing within this ranking."
+        ),
+        color=discord.Color.from_rgb(12, 16, 24),
+    )
+    embed.add_field(
+        name="〔 I 〕  ✦  COMMUNITY DIRECTOR",
+        value=(
+            "╭──────────────────────────╮\n"
+            "│       **COMMUNITY DIRECTOR**       │\n"
+            "╰──────────────────────────╯\n"
+            "▰▰▰▰▰▰▰▰▰▰  **TOP AUTHORITY**"
+        ),
+        inline=False,
+    )
+    embed.add_field(
+        name="〔 II 〕  ◈  EXECUTIVE MEMBER AFFAIRS",
+        value=(
+            "　　　　　　│\n"
+            "　　**Chief of Member Affairs**\n"
+            "▰▰▰▰▰▰▰▰▱▱  *Directly below Director*"
+        ),
+        inline=False,
+    )
+    embed.add_field(
+        name="〔 III 〕  ⟐  DEPARTMENT LEADERS",
+        value=(
+            "　　**Administrator**  ·  **Head of Cases**  ·  **Chief Verifier**\n"
+            "▰▰▰▰▰▰▰▱▱▱  *Equal standing on this tier*"
+        ),
+        inline=False,
+    )
+    embed.add_field(
+        name="〔 IV 〕  ◆  SENIOR / SPECIALIST TIER",
+        value=(
+            "　**Senior Moderator**  ·  **Case Specialist**  ·  **Verification Specialist**\n"
+            "▰▰▰▰▰▰▱▱▱▱  *Specialist roles share the same standing*"
+        ),
+        inline=False,
+    )
+    embed.add_field(
+        name="〔 V 〕  ◇  OPERATIONAL TIER",
+        value=(
+            "　**Moderator**  ·  **Ticket Handler**  ·  **Verification Personnel**\n"
+            "▰▰▰▱▱▱▱▱▱▱  *Core staff roles*"
+        ),
+        inline=False,
+    )
+    embed.add_field(
+        name="⟐  RANKING NOTES",
+        value=(
+            "• Community Director is the highest position.\n"
+            "• Chief of Member Affairs sits just below the Director.\n"
+            "• Case Specialist and Verification Specialist are equal in standing.\n"
+            "• Ticket Handling remains its own path and does not lead to Community Director."
+        ),
+        inline=False,
+    )
+    embed.set_footer(text="PROJECT HAVEN  ⟐  STAFF POWER STRUCTURE")
+    await interaction.response.send_message(embed=embed)
+
+
 @bot.event
 async def setup_hook():
     # Re-register the department V2 views so existing rule panels remain
@@ -156,7 +226,7 @@ async def on_app_command_completion(
     interaction: discord.Interaction, command: app_commands.Command
 ):
     await send_pride_event(interaction, f"command:{command.qualified_name}")
-    if command.qualified_name in {"rules", "general", "security-rules", "research-rules", "technical-rules", "janitor-rules", "medical-rules", "paths"}:
+    if command.qualified_name in {"rules", "general", "security-rules", "research-rules", "technical-rules", "janitor-rules", "medical-rules", "paths", "power-rankings"}:
         await send_pride_event(interaction, "rules_view")
 
 
