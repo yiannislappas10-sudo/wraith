@@ -842,8 +842,15 @@ class LegacyRuleSelect(ui.Select):
             "ingame": INGAME_RULES,
             "economy": ECONOMY_RULES,
         }
+        if key == "general":
+            # General Rules exceed Discord's 4,000-character TextDisplay limit.
+            # Open the section selector instead of sending the entire text at once.
+            reply_view = DepartmentRulesView("general")
+        else:
+            reply_view = build_reply(titles[key], bodies[key])
+
         await interaction.response.send_message(
-            view=build_reply(titles[key], bodies[key]),
+            view=reply_view,
             ephemeral=True,
         )
 
