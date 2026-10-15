@@ -694,8 +694,66 @@ Deliberately scamming another player in a trade (not delivering after payment, s
 Staff reserve the right to reverse, freeze, or cancel any trade/listing suspected of fraud, exploitation, or rule-breaking, even without a formal report."""
 
 
+EZ9_RULES = [
+    {
+        "label": "1. Technology & Attire",
+        "value": "ez9_technology",
+        "description": "Keep outfits and equipment appropriate to the Exclusion Zone.",
+        "title": "𓆩 TECHNOLOGY & ATTIRE RULES 𓆪",
+        "bullets": [
+            "Technology is scarce within the Exclusion Zone. Character outfits, equipment, and accessories must reflect the setting's limited technological capabilities.",
+            "I. No Overly Advanced Technology: Excessively advanced technology is prohibited, including advanced exo-arms and powered prosthetics, highly futuristic armor and equipment, and technology that far exceeds the setting's established capabilities. Technology should be primitive, scarce, improvised, or otherwise appropriate to the lore.",
+            "II. Dress for the Exclusion Zone: Clothing, equipment, and accessories must make sense for life inside an Exclusion Zone. Consider the setting, available resources, and established lore; avoid items that feel out of place or contradict the world's atmosphere.",
+            "III. No Hate Symbols or Prohibited Imagery: Clothing, accessories, symbols, and other visible items promoting racism, Nazism, or other prohibited hateful ideologies are strictly forbidden. Violations may result in a permanent ban.",
+            "IV. Technology Limits: All technology must remain within the equivalent of very early exosuit technology at most. Do not assume advanced prosthetics, powered armor, or futuristic devices are permitted just because they exist in real life or science fiction. When uncertain, ask the Lore Team before using them.",
+            "V. Future Amendments: Additional rules or clarifications may be issued by the designated Lore Team member: <@939434613468712962>. Follow future announcements and approved changes.",
+            "When in doubt, prioritize the lore over appearance. Your character should look like they belong in the Exclusion Zone."
+        ],
+    },
+    {
+        "label": "2. Community Rules",
+        "value": "ez9_community",
+        "description": "Community conduct standards for the EZ-9 game.",
+        "title": "𓆩 COMMUNITY RULES 𓆪",
+        "bullets": [
+            "These standards help prevent unnecessary conflicts and keep the environment comfortable as the community develops.",
+            "I. Keep Drama Out: Do not bring personal drama, arguments, or ongoing conflicts into voice chats, General, or other community channels. First offense: 24-hour mute. Continued behavior after the mute: kick, with an appeal available. Repeated offenses after that: permanent ban without appeal.",
+            "II. No Discrimination or Hate: Racism, homophobia, sexism, or discrimination targeting someone's race, gender, or identity is strictly prohibited. This is a ban-worthy offense. Appeals may be considered at staff discretion, but credible evidence must be provided if claiming the behavior was accidental or unintentional. An appeal does not guarantee an unban.",
+            "III. No Highly Sensitive Content: Do not post or initiate discussions involving suicide, self-harm, NSFW content, or excessive graphic gore.",
+            "IV. Use the Correct Channels: Keep messages, discussions, and content in their designated channels. Follow channel descriptions and staff instructions.",
+            "V. Respect Personal Boundaries: Respect members' stated boundaries, both in and out of roleplay. Do not pressure people into interactions they have declined. Set clear, reasonable boundaries and communicate changes respectfully. Boundaries must not be used to bypass established rules, such as declaring a character immune to being killed where death is permitted under RP rules.",
+            "VI. No Spamming: Do not flood channels with repeated messages, excessive mentions, or other disruptive spam.",
+            "VII. Keep Swearing to a Minimum: Avoid excessive profanity and keep conversations reasonably comfortable and respectful.",
+            "VIII. No Political Discussions: Political debates, arguments about governments, and political jabs are not permitted, regardless of political side.",
+            "Staff may take action based on the severity and context of an incident. Follow these rules to help keep the community welcoming and focused on its intended purpose."
+        ],
+    },
+    {
+        "label": "3. Roleplay Rules",
+        "value": "ez9_roleplay",
+        "description": "Lore, combat, character, and faction rules.",
+        "title": "𓆩 ROLEPLAY RULES 𓆪",
+        "bullets": [
+            "Standards established by the Lore Team to ensure an enjoyable, comfortable, and story-driven roleplay experience for everyone.",
+            "I. Community Standards: All standard community rules apply to roleplay. Being in character does not exempt you from following the server's general rules.",
+            "II. Sensitive Topics: Suicide, self-harm, NSFW content, and other sensitive topics are prohibited in roleplay.",
+            "III. Combat & No Man's Land: Lethal combat and killing are only permitted in No Man's Land. Outside of No Man's Land, combat must remain non-fatal, such as shooting a character's limbs or using non-lethal physical attacks. Do not kill characters outside the designated area.",
+            "IV. Faction Relations & Lore: Before choosing or interacting with a faction, check its relations with other factions. Character actions should respect established lore and faction dynamics.",
+            "V. Character Age: All original characters (OCs) must be 18 years old or older. Minor characters are not permitted in this wasteland setting.",
+            "VI. Character Limits & Lore Death: You may have only one active character at a time. If your character is lore-killed or becomes permanently unplayable due to an approved story event, you may create a replacement character.",
+            "VII. Faction Membership: Each character may officially belong to only one faction. You may remain neutral, maintain friendships, or have rivalries with members of other factions. You may only join one faction once you have earned sufficient reputation.",
+            "VIII. No Invincibility: No invincibility, godmodding, or making your character immune to damage and consequences. Characters must remain vulnerable, and combat outcomes must be fair.",
+            "IX. No Metagaming: Do not use information your character has not learned in roleplay. OOC information must not be used to gain an unfair IC advantage.",
+            "X. Faction Checks Before Combat: Check the other character's faction using a PDA scanner before opening fire when this feature becomes available. This is a recommended future feature and is not yet an active requirement.",
+            "LORE TEAM NOTICE: Do not use faction or infected role tags unless assigned by the Lore Team or the Owner. NOMAD is the only permitted tag otherwise.",
+            "Thank you for respecting the rules and helping maintain an immersive roleplay environment. — The Lore Team"
+        ],
+    },
+]
+
 RULESETS = {
     "general": _parse_general_rules(),
+    "ez9": EZ9_RULES,
     "ingame": [{"label": f"Section {i}", "value": f"ingame_{i}", "description": "View this in-game rules section.", "title": f"IN-GAME RULES — SECTION {i}", "bullets": [part.strip()]} for i, part in enumerate(INGAME_RULES.split("\n\n")[1:], start=1) if part.strip()],
     "economy": [{"label": f"Rule {i}", "value": f"economy_{i}", "description": "View this Envy economy rule.", "title": f"ECONOMY (ENVY) — RULE {i}", "bullets": [part.strip()]} for i, part in enumerate(ECONOMY_RULES.split("\n\n")[1:], start=1) if part.strip()],
     "security": SECURITY_RULES,
@@ -707,6 +765,7 @@ RULESETS = {
 
 TITLES = {
     "general": "GENERAL RULES",
+    "ez9": "EZ-9 — GAME RULES",
     "ingame": "§ ROBLOX GAME RULES §",
     "economy": "ECONOMY (ENVY) RULES",
     "security": "SITE AEGIS 17 — SECURITY RULES",
@@ -722,6 +781,7 @@ CLOSING_TEXT = {
     "general": (
         "*These General Rules apply to everyone in the server. Select a section above to read its full rules.*"
     ),
+    "ez9": "*EZ-9 rules are divided into Technology & Attire, Community, and Roleplay. Select a section above and follow the Lore Team guidance.*",
     "security": (
         "*Security is a position of trust. If you cannot control your weapon, your authority, "
         "or your behavior, you will not remain Security.*\n\n"
