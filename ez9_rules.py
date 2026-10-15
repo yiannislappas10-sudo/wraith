@@ -186,7 +186,7 @@ class EZ9RuleSelect(ui.Select):
 class EZ9RulesView(ui.LayoutView):
     def __init__(self):
         super().__init__(timeout=None)
-        panel = ui.Container(accent_color=AMBER)
+        panel = ui.Container(accent_color=HAZARD)
         panel.add_item(ui.TextDisplay("# EZ-9 // CONTAINMENT ARCHIVE"))
         panel.add_item(
             ui.TextDisplay(
