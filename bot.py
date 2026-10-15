@@ -7,6 +7,8 @@ from discord import app_commands
 from discord.ext import commands
 from dotenv import load_dotenv
 
+from ez9_rules import build_ez9_view
+
 from rules_view import (
     build_department_view,
     build_persistent_department_views,
@@ -58,6 +60,11 @@ async def send_pride_event(interaction: discord.Interaction, event_name: str):
 @bot.tree.command(name="rules", description="Show the community, game, and economy rules.")
 async def rules(interaction: discord.Interaction):
     await interaction.response.send_message(view=build_rules_overview())
+
+
+@bot.tree.command(name="ez", description="Open the EZ-9 rules index and choose a rule set.")
+async def ez(interaction: discord.Interaction):
+    await interaction.response.send_message(view=build_ez9_view())
 
 
 @bot.tree.command(name="general", description="Post the General Rules Components V2 panel.")
@@ -231,7 +238,7 @@ async def on_app_command_completion(
     interaction: discord.Interaction, command: app_commands.Command
 ):
     await send_pride_event(interaction, f"command:{command.qualified_name}")
-    if command.qualified_name in {"rules", "general", "security-rules", "research-rules", "technical-rules", "janitor-rules", "medical-rules", "paths", "power-rankings"}:
+    if command.qualified_name in {"rules", "ez", "general", "security-rules", "research-rules", "technical-rules", "janitor-rules", "medical-rules", "paths", "power-rankings"}:
         await send_pride_event(interaction, "rules_view")
 
 
