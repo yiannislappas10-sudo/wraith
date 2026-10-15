@@ -36,7 +36,8 @@ Treat every member with respect regardless of disagreements.
 Keep conversations readable and avoid intentionally disrupting the community.
 • Spam, excessive emojis, repeated messages, or keyboard smashing → Warning
 • Mass mentions (@everyone / @here) without permission → Warning / Temporary Mute
-• Advertising servers, communities, or products → Temporary Ban
+• Advertising servers, communities, or products without permission → Temporary Ban
+• Mass-DMing or repeatedly messaging multiple members to advertise a server, community, product, or social account → Permanent Ban
 • Using alternate accounts to avoid punishments (Alt Evasion) → Permanent Ban (All Accounts)
 • Intentionally disrupting chats, events, or roleplay → Warning / Mute / Ban
 
@@ -75,7 +76,12 @@ Respect what other members have created.
 **IX. Anti-Drama**
 Keep conflicts out of public spaces.
 • Personal conflicts, callouts, or disputes must be taken to DMs or a support ticket, not aired in public channels → Warning
-• Stirring drama or baiting others into public arguments → Warning / Temporary Mute"""
+• Stirring drama or baiting others into public arguments → Warning / Temporary Mute
+
+**X. Mini-Modding / Backseat Moderation**
+Do not act as staff or try to enforce punishments when you are not an authorized staff member. Report rule violations to staff through the proper channels instead.
+• Threatening to punish, bossing members around as if you are staff, or repeatedly policing others' behavior → Warning / Mute
+• Repeated or disruptive mini-modding after staff instruction → Temporary Ban"""
 
 SECURITY_RULES = [
     {
