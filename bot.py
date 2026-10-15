@@ -224,6 +224,7 @@ async def setup_hook():
     # interactive after a Railway restart.
     for view in build_persistent_department_views():
         bot.add_view(view)
+    bot.add_view(build_ez9_view())
 
     if GUILD_ID:
         guild = discord.Object(id=int(GUILD_ID))
