@@ -65,6 +65,11 @@ async def general(interaction: discord.Interaction):
     await interaction.response.send_message(view=build_general_view())
 
 
+@bot.tree.command(name="ez9-rules", description="Post the EZ-9 game rules Components V2 panel.")
+async def ez9_rules(interaction: discord.Interaction):
+    await interaction.response.send_message(view=build_department_view("ez9"))
+
+
 @bot.tree.command(name="security-rules", description="Post the Security rules Components V2 panel.")
 async def security_rules(interaction: discord.Interaction):
     await interaction.response.send_message(view=build_department_view("security"))
