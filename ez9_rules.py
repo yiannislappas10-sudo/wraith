@@ -4,8 +4,8 @@ import discord
 from discord import ui
 
 
-# EZ-9 has its own visual identity: industrial warning amber, steel-grey
-# dividers, concise field-manual language, and no Project Haven ornamentation.
+# EZ-9 visual identity: high-contrast containment archive in hazard-lime,
+# paper-white, and near-black. Keep it distinct from Project Haven's blue/teal panels.
 EZ9_RULES = {
     "attire": {
         "label": "Technology & Attire",
@@ -37,11 +37,6 @@ For simplicity, all technology must remain within the equivalent of very early e
 
 Do not assume that every type of advanced prosthetic, powered armor, or futuristic device is permitted just because it exists in real life or in science fiction. When uncertain, ask the Lore Team before using it.
 
-**V. Future Amendments**
-Additional rules or clarifications may be issued by the designated Lore Team member: <@939434613468712962>.
-
-Follow future announcements and approved changes.
-
 > When in doubt, prioritize the lore over appearance. Your character should look like they belong in the Exclusion Zone.""",
     },
     "community": {
@@ -53,14 +48,11 @@ Follow future announcements and approved changes.
 
 **I. Keep Drama Out**
 Do not bring personal drama, arguments, or ongoing conflicts into voice chats, General, or other community channels.
-• First offense: 24-hour mute.
-• Continued behavior after the mute: Kick, with an appeal available.
-• Repeated offenses after that: Permanent ban without appeal.
-
+Staff may intervene depending on the severity and context of the situation.
 **II. No Discrimination or Hate**
 Racism, homophobia, sexism, or discrimination targeting someone’s race, gender, or identity is strictly prohibited.
 
-This is a ban-worthy offense. Appeals may be considered at staff discretion, but you must provide credible evidence if claiming the behavior was accidental or unintentional. An appeal does not guarantee an unban.
+Staff will review serious incidents based on their severity and context. If you believe a situation has been misunderstood, explain what happened honestly to the staff team.
 
 **III. No Highly Sensitive Content**
 Do not post or initiate discussions involving suicide, self-harm, NSFW content, or excessive graphic gore. Keep the community appropriate and comfortable for its members.
@@ -136,20 +128,21 @@ Thank you for respecting the rules and helping us maintain an immersive roleplay
 }
 
 
-AMBER = 0xD98B22
-STEEL = 0x242A31
+HAZARD = 0xB7F34A
+INK = 0x111511
+PAPER = 0xF1F3EA
 
 
 def _rule_detail(key: str) -> ui.LayoutView:
     rule = EZ9_RULES[key]
     view = ui.LayoutView()
-    panel = ui.Container(accent_color=AMBER)
-    panel.add_item(ui.TextDisplay(f"# {rule['title']}"))
-    panel.add_item(ui.TextDisplay("-# EZ-9 / FIELD MANUAL / AUTHORIZED COMMUNITY DIRECTIVES"))
+    panel = ui.Container(accent_color=HAZARD)
+    panel.add_item(ui.TextDisplay(f"# [ ARCHIVE FILE // {rule['title']} ]"))
+    panel.add_item(ui.TextDisplay("-# EZ-9 CONTAINMENT ARCHIVE  ::  ACCESS CLASS 09  ::  FILE VERIFIED"))
     panel.add_item(ui.Separator())
     panel.add_item(ui.TextDisplay(rule["body"]))
     panel.add_item(ui.Separator())
-    panel.add_item(ui.TextDisplay("-# Read the complete section. Lore and community standards apply together."))
+    panel.add_item(ui.TextDisplay("-# END OF FILE  //  Cross-check all directives before entering the zone."))
     view.add_item(panel)
     return view
 
@@ -165,11 +158,11 @@ class EZ9RuleSelect(ui.Select):
             )
             for item, emoji in zip(
                 EZ9_RULES.values(),
-                ["⚙️", "▣", "⌖"],
+                ["🟩", "📄", "⚠️"],
             )
         ]
         super().__init__(
-            placeholder="OPEN A DIRECTIVE  ▾",
+            placeholder="SELECT ARCHIVE FILE...",
             min_values=1,
             max_values=1,
             options=options,
@@ -194,31 +187,31 @@ class EZ9RulesView(ui.LayoutView):
     def __init__(self):
         super().__init__(timeout=None)
         panel = ui.Container(accent_color=AMBER)
-        panel.add_item(ui.TextDisplay("# EZ-9  /  FIELD DIRECTIVES"))
+        panel.add_item(ui.TextDisplay("# EZ-9 // CONTAINMENT ARCHIVE"))
         panel.add_item(
             ui.TextDisplay(
-                "-# EXCLUSION ZONE OPERATIONS   •   RULES INDEX 01–03\n"
-                "Three directives govern equipment, community conduct, and roleplay. "
-                "Select a file below to open its full text privately."
+                "-# ARCHIVE NODE 09-A   |   ACCESS: PUBLIC   |   REVISION: CURRENT\n"
+                "Three records define permitted equipment, community conduct, and roleplay. "
+                "Choose a record to open the complete document privately."
             )
         )
         panel.add_item(ui.Separator())
         panel.add_item(
             ui.TextDisplay(
-                "▰ **01  EQUIPMENT & ATTIRE**\n"
-                "Technology limits, setting consistency, prohibited imagery.\n\n"
-                "▰ **02  COMMUNITY CONDUCT**\n"
-                "Respect, boundaries, sensitive content, and moderation.\n\n"
-                "▰ **03  ROLEPLAY PROTOCOL**\n"
-                "Combat zones, factions, character limits, and lore."
+                "🟩 **FILE 01 / EQUIPMENT + ATTIRE**\n"
+                "Tech ceilings · field-appropriate clothing · prohibited imagery\n\n"
+                "⬜ **FILE 02 / COMMUNITY STANDARDS**\n"
+                "Conduct · boundaries · channels · restricted content\n\n"
+                "⚠️ **FILE 03 / ROLEPLAY OPERATIONS**\n"
+                "Combat zones · faction conduct · characters · lore"
             )
         )
         panel.add_item(ui.Separator())
         panel.add_item(ui.ActionRow(EZ9RuleSelect()))
         panel.add_item(
             ui.TextDisplay(
-                "-# EZ-9 // COMPLIANCE NOTICE: Staff may act on severity and context. "
-                "Lore Team clarifications take precedence for setting-specific questions."
+                "-# ARCHIVE NOTICE: Staff assess incidents by context and severity. "
+                "For setting-specific questions, consult the Lore Team."
             )
         )
         self.add_item(panel)
