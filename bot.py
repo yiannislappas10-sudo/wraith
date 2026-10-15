@@ -18,7 +18,7 @@ from rules_view import (
 
 load_dotenv()
 TOKEN = os.getenv("DISCORD_TOKEN")
-GUILD_ID = os.getenv("GUILD_ID")
+GUILD_IDS = [int(value.strip()) for value in os.getenv("GUILD_ID", "").split(",") if value.strip()]
 ALERT_USER_ID = int(os.getenv("ALERT_USER_ID", "1441030741998702592"))
 PRIDE_API_URL = os.getenv("PRIDE_API_URL", "").rstrip("/")
 PRIDE_API_KEY = os.getenv("PRIDE_API_KEY", "")
@@ -226,10 +226,12 @@ async def setup_hook():
         bot.add_view(view)
     bot.add_view(build_ez9_view())
 
-    if GUILD_ID:
-        guild = discord.Object(id=int(GUILD_ID))
-        bot.tree.copy_global_to(guild=guild)
-        await bot.tree.sync(guild=guild)
+    if GUILD_IDS:
+        # Sync commands to every configured guild (comma-separated GUILD_ID env var).
+        for guild_id in GUILD_IDS:
+            guild = discord.Object(id=guild_id)
+            bot.tree.copy_global_to(guild=guild)
+            await bot.tree.sync(guild=guild)
     else:
         await bot.tree.sync()
 
